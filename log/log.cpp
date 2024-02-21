@@ -78,9 +78,11 @@ void Log::init(int level, const char* path, const char* suffix, int maxQueCapaci
     char fileName[LOG_NAME_LEN] = {0};
     snprintf(fileName, LOG_NAME_LEN - 1, "%s/%04d_%02d_%02d%s", 
             path_, systime->tm_year + 1900, systime->tm_mon + 1, systime->tm_mday, suffix_);
+    printf("%s\n", fileName);
+
     toDay_ = systime->tm_mday;
 
-    {
+   {
         lock_guard<mutex> locker(mtx_);
         buff_.RetrieveAll();
         if(fp_) {   // 重新打开
@@ -88,8 +90,10 @@ void Log::init(int level, const char* path, const char* suffix, int maxQueCapaci
             fclose(fp_);
         }
         fp_ = fopen(fileName, "a"); // 打开文件读取并附加写入
+        
         if(fp_ == nullptr) {
             mkdir(fileName, 0777);
+            
             fp_ = fopen(fileName, "a"); // 生成目录文件（最大权限）
         }
         assert(fp_ != nullptr);
