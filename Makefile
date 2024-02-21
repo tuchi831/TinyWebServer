@@ -1,0 +1,29 @@
+CC = g++
+CFLAGS = -Wall -Wextra -std=c++11 -pthread
+
+SOURCES_POOL = pool/sqlconnpool.cpp
+SOURCES_LOG = log/log.cpp
+SOURCES_TEST = test/test.cpp
+
+OBJECTS_POOL = $(SOURCES_POOL:.cpp=.o)
+OBJECTS_LOG = $(SOURCES_LOG:.cpp=.o)
+OBJECTS_TEST = $(SOURCES_TEST:.cpp=.o)
+
+TARGET = test
+
+all: $(TARGET)
+
+$(TARGET): $(OBJECTS_POOL) $(OBJECTS_LOG) $(OBJECTS_TEST)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJECTS_POOL) $(OBJECTS_LOG) $(OBJECTS_TEST)
+
+$(OBJECTS_POOL): $(SOURCES_POOL)
+	$(CC) $(CFLAGS) -c $(SOURCES_POOL) -o $(OBJECTS_POOL)
+
+$(OBJECTS_LOG): $(SOURCES_LOG)
+	$(CC) $(CFLAGS) -c $(SOURCES_LOG) -o $(OBJECTS_LOG)
+
+$(OBJECTS_TEST): $(SOURCES_TEST)
+	$(CC) $(CFLAGS) -c $(SOURCES_TEST) -o $(OBJECTS_TEST)
+
+clean:
+	rm -f $(OBJECTS_POOL) $(OBJECTS_LOG) $(OBJECTS_TEST) $(TARGET)
